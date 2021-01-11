@@ -28,7 +28,15 @@ public class PersonService {
 
 
         //blockNames에 이름이 포함되어있지 않은것만 골라서 List로 변환함.
-        return people.stream().filter(person -> person.getBlock() == null).collect(Collectors.toList()); //filter는 조건에 맞는것만 return해줌
+        //return people.stream().filter(person -> person.getBlock() == null).collect(Collectors.toList()); //filter는 조건에 맞는것만 return해줌
+        return personRepository.findByBlockIsNull();
+    }
+
+    public List<Person> getPeopleByName(String name){
+//        List<Person> people = personRepository.findAll();
+
+//        return people.stream().filter(person -> person.getName().equals(name)).collect(Collectors.toList());
+        return personRepository.findByName(name);
     }
 
     @Transactional(readOnly = true) //select문만 있기때문에

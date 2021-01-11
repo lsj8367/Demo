@@ -52,8 +52,44 @@ class PersonRepositoryTest {
 
         System.out.println(map);
         System.out.println(map.get(person2)); //person1로 넣었는데 주소가같은 person2로 가져와도 가져올수 있게됨.
+    }
 
+    @Test
+    void findByBloodType(){
+        givenPerson("martin", 10, "A");
+        givenPerson("david", 9, "B");
+        givenPerson("dennis", 8, "O");
+        givenPerson("sophia", 7, "AB");
+        givenPerson("benny", 6, "A");
+        givenPerson("John", 5, "A");
 
+        List<Person> result = personRepository.findByBloodType("A");
+
+        result.forEach(System.out::println);
+
+    }
+
+    @Test
+    void findByBirthDayBetween(){
+        givenPerson("martin", 10, "A", LocalDate.of(1991, 8, 15));
+        givenPerson("david", 9, "B", LocalDate.of(1992, 7, 10));
+        givenPerson("dennis", 8, "O", LocalDate.of(1993, 1, 5));
+        givenPerson("sophia", 7, "AB", LocalDate.of(1994, 6, 30));
+        givenPerson("benny", 6, "A", LocalDate.of(1995, 8, 30));
+
+        List<Person> result = personRepository.findByBirthdayBetween(LocalDate.of(1991, 8, 1), LocalDate.of(1995, 8, 31));
+
+        result.forEach(System.out::println);
+    }
+
+    private void givenPerson(String name, int age, String bloodType){
+        givenPerson(name, age, bloodType, null);
+    }
+
+    private void givenPerson(String name, int age, String bloodType, LocalDate birthday){
+        Person person = new Person(name, age, bloodType);
+        person.setBirthday(birthday);
+        personRepository.save(person);
     }
 
 }

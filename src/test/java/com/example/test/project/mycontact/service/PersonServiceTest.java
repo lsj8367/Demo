@@ -35,6 +35,16 @@ class PersonServiceTest {
     }
 
     @Test
+    void getPeopleByName(){
+        givenPeople();
+
+        List<Person> result = personService.getPeopleByName("martin"); //martin이라는 이름을 가진 데이터 가져옴
+
+        result.forEach(System.out::println);
+    }
+
+
+    @Test
     void cascadeTest(){
         givenPeople();
 
