@@ -2,10 +2,7 @@ package com.example.test.project.mycontact.domain;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
@@ -66,11 +63,6 @@ public class Person {
     }
      */
 
-    private boolean block; //차단
-
-    private String blockReason; //차단이유
-
-    private LocalDate blockStartDate;
-
-    private LocalDate blockEndDate;
+    @OneToOne
+    private Block block;
 }

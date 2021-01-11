@@ -37,15 +37,21 @@ class PersonServiceTest {
         givenBlock("martin");
     }
 
-    private void givenBlock(String name) {
-        blockRepository.save(new Block(name));
+    private Block givenBlock(String name) {
+        return blockRepository.save(new Block(name));
     }
 
     private void givenPeople() {
         givenPerson("martin", 10, "A");
         givenPerson("david", 9, "B");
         givenPerson("dennis", 7, "O");
-        givenPerson("martin", 11, "AB");
+        givenBlockPerson("martin", 11, "AB");
+    }
+
+    private void givenBlockPerson(String name, int age, String bloodType){
+        Person blockPerson = new Person(name, age, bloodType);
+        blockPerson.setBlock(givenBlock(name));
+        personRepository.save(blockPerson);
     }
 
     private void givenPerson(String name, int age, String bloodType) {
