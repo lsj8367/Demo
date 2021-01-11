@@ -1,11 +1,19 @@
 package com.example.test.project.mycontact.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.time.LocalDate;
 
 @Entity
+@Getter
+@Setter
+@ToString //(exclude = "phoneNumber") exclude안에 변수를 넣어주면 해당 변수는 제외
 public class Person {
 
     @Id
@@ -16,36 +24,16 @@ public class Person {
 
     private int age;
 
-    public Long getId() {
-        return id;
-    }
+    private String hobby;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    private String bloodType;
 
-    public String getName() {
-        return name;
-    }
+    private String address;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    private LocalDate birthday;
 
-    public int getAge() {
-        return age;
-    }
+    private String job;
 
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    @Override
-    public String toString() {
-        return "Person{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", age=" + age +
-                '}';
-    }
+    //@ToString.Exclude //상단과 같은 뜻
+    private String phoneNumber;
 }
