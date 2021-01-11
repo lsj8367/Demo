@@ -63,6 +63,8 @@ public class Person {
     }
      */
 
-    @OneToOne
+    //person에 대해 동작을 수행해도 영속성 결합으로 같이 변경 삭제 추가등이 된다.  optional = false는 inner join 특성을 갖고있다.
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true) //{CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}
+    @ToString.Exclude
     private Block block;
 }
