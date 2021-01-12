@@ -79,4 +79,19 @@ public class PersonService {
 
         personRepository.save(person);
     }
+
+    @Transactional
+    public void delete(Long id){
+//        Person person = personRepository.findById(id).orElseThrow(() -> new RuntimeException("아이디가 존재하지 않습니다"));
+//        personRepository.delete(person);
+        //personRepository.deleteById(id); //위와 같은 기능
+        //바로 삭제하면 문제가 생길수있다.
+        
+        //그래서 update형식으로 deleted 옵션을 넣어줌
+        Person person = personRepository.findById(id).orElseThrow(() -> new RuntimeException("아이디가 존재하지 않습니다"));
+        
+        person.setDeleted(true);
+        
+        personRepository.save(person);
+    }
 }

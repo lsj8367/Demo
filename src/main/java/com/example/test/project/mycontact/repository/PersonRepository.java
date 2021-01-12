@@ -23,4 +23,6 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
     @Query(value = "select person from Person person where person.birthday.monthOfBirthday = :monthOfBirthday") // ?1은 첫번째인자 @Param 매핑시킨값으로 :값 해도 가능 jpql
     List<Person> findByMonthOfBirthday(@Param("monthOfBirthday") int monthOfBirthday);
 
+    @Query(value = "select * from Person person where person.deleted = true", nativeQuery = true) //nativeQuery 는 이 쿼리문 직접수행
+    List<Person> findPeopleDeleted();
 }

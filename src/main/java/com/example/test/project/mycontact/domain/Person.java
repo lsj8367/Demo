@@ -3,6 +3,8 @@ package com.example.test.project.mycontact.domain;
 import com.example.test.project.mycontact.controller.dto.PersonDto;
 import com.example.test.project.mycontact.domain.dto.Birthday;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Where;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
@@ -21,6 +23,7 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 //@EqualsAndHashCode // 기존의 것과 새로 생성된 객체의 주소를 맞춰줌
 @Data
+@Where(clause = "deleted = false") // deleted속성 false만 출력
 public class Person {
 
     @Id
@@ -54,6 +57,9 @@ public class Person {
 
     @ToString.Exclude //상단과 같은 뜻
     private String phoneNumber;
+
+    @ColumnDefault("0") // 0은 false
+    private boolean deleted; //아이디 삭제여부
 
     //person에 대해 동작을 수행해도 영속성 결합으로 같이 변경 삭제 추가등이 된다.  optional = false는 inner join 특성을 갖고있다.
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true) //{CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}
