@@ -1,5 +1,6 @@
 package com.example.test.project.mycontact.controller;
 
+import com.example.test.project.mycontact.controller.dto.PersonDto;
 import com.example.test.project.mycontact.domain.Person;
 import com.example.test.project.mycontact.repository.PersonRepository;
 import com.example.test.project.mycontact.service.PersonService;
@@ -33,6 +34,19 @@ public class PersonController {
         log.info("person -> {}", personRepository.findAll());
     }
 
+    @PutMapping("/{id}")
+    public void modifyPerson(@PathVariable Long id, @RequestBody PersonDto personDto){
+        personService.modify(id, personDto);
 
+        log.info("person -> {}", personRepository.findAll());
+
+    }
+
+    @PatchMapping("/{id}") //일부 리소스만 업데이트
+    public void modifyPerson(@PathVariable Long id, String name){
+        personService.modify(id, name);
+
+        log.info("person -> {}", personRepository.findAll());
+    }
 
 }

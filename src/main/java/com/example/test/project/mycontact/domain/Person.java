@@ -1,7 +1,10 @@
 package com.example.test.project.mycontact.domain;
 
+import com.example.test.project.mycontact.controller.dto.PersonDto;
 import com.example.test.project.mycontact.domain.dto.Birthday;
 import lombok.*;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -32,7 +35,7 @@ public class Person {
     @NonNull
     @Column(nullable = false)
     @Min(1)
-    private int age;
+    private Integer age;
 
     private String hobby;
 
@@ -56,4 +59,30 @@ public class Person {
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true) //{CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}
     @ToString.Exclude
     private Block block;
+
+    public void set(PersonDto personDto){ //데이터 수정작업 하지 않은것은 유지하게 만드는 메소드
+        if (personDto.getAge() != 0){
+            this.setAge(personDto.getAge());
+        }
+
+        if(!ObjectUtils.isEmpty(personDto.getHobby())){
+            this.setHobby(personDto.getHobby());
+        }
+
+        if(!ObjectUtils.isEmpty(personDto.getBloodType())){
+            this.setBloodType(personDto.getBloodType());
+        }
+
+        if(!ObjectUtils.isEmpty(personDto.getAddress())){
+            this.setAddress(personDto.getAddress());
+        }
+
+        if(!ObjectUtils.isEmpty(personDto.getJob())){
+            this.setJob(personDto.getJob());
+        }
+
+        if(!ObjectUtils.isEmpty(personDto.getPhoneNumber())){
+            this.setPhoneNumber(personDto.getPhoneNumber());
+        }
+    }
 }
