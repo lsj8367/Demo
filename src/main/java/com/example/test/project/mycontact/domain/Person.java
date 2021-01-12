@@ -1,8 +1,10 @@
 package com.example.test.project.mycontact.domain;
 
+import com.example.test.project.mycontact.domain.dto.Birthday;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import java.time.LocalDate;
 
 @Entity
@@ -33,35 +35,14 @@ public class Person {
 
     private String address;
 
-    private LocalDate birthday;
+    @Embedded
+    @Valid
+    private Birthday birthday; //BirthDay 클래스 참조
 
     private String job;
 
     @ToString.Exclude //상단과 같은 뜻
     private String phoneNumber;
-
-    /*
-    public boolean equals(Object object){
-        if(object == null){
-            return false;
-        }
-
-        Person person = (Person)object;
-
-        if(!person.getName().equals(this.getName())){
-            return false;
-        }
-
-        if(person.getAge() != this.getAge()){
-            return false;
-        }
-        return true;
-    }
-
-    public int hashCode(){
-        return(name + age).hashCode();
-    }
-     */
 
     //person에 대해 동작을 수행해도 영속성 결합으로 같이 변경 삭제 추가등이 된다.  optional = false는 inner join 특성을 갖고있다.
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true) //{CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}
