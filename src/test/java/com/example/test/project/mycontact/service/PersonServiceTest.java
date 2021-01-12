@@ -16,6 +16,9 @@ import java.util.List;
 class PersonServiceTest {
 
     @Autowired
+    private PersonRepository personRepository;
+
+    @Autowired
     private PersonService personService;
 
     @Test

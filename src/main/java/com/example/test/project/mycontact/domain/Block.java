@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.LocalDate;
 
@@ -17,7 +18,7 @@ import java.time.LocalDate;
 public class Block {
 
     @Id
-    @GeneratedValue //자동생성
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //자동생성
     private Long id;
 
     @NonNull
