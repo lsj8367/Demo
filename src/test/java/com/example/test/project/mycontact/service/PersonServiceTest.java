@@ -12,6 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDate;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @SpringBootTest
 class PersonServiceTest {
 
@@ -27,24 +29,24 @@ class PersonServiceTest {
 
         result.forEach(System.out::println);
 
-        Assertions.assertThat(result.size()).isEqualTo(3);
-        Assertions.assertThat(result.get(0).getName()).isEqualTo("martin");
-        Assertions.assertThat(result.get(1).getName()).isEqualTo("david");
-        Assertions.assertThat(result.get(2).getName()).isEqualTo("benny");
+        assertThat(result.size()).isEqualTo(3);
+        assertThat(result.get(0).getName()).isEqualTo("martin");
+        assertThat(result.get(1).getName()).isEqualTo("david");
+        assertThat(result.get(2).getName()).isEqualTo("benny");
     }
 
     @Test
     void getPeopleByName(){
         List<Person> result = personService.getPeopleByName("martin"); //martin이라는 이름을 가진 데이터 가져옴
 
-        Assertions.assertThat(result.size()).isEqualTo(1);
-        Assertions.assertThat(result.get(0).getName()).isEqualTo("martin");
+        assertThat(result.size()).isEqualTo(1);
+        assertThat(result.get(0).getName()).isEqualTo("martin");
     }
     @Test
     void getPerson(){
         Person person = personService.getPerson(3L);
 
-        Assertions.assertThat(person.getName()).isEqualTo("dennis");
+        assertThat(person.getName()).isEqualTo("dennis");
     }
 
 }

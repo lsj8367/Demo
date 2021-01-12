@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,11 +42,17 @@ public class PersonService {
 
     @Transactional(readOnly = true) //select문만 있기때문에
     public Person getPerson(Long id){
-        Person person = personRepository.findById(id).get();
+//        Person person = personRepository.findById(id).get();
 
-        //System.out.println("person : " + person);
+        Person person = personRepository.findById(id).orElse(null); //get을 기본으로 하는데 값이 없다면 null을 리턴
+
         log.info("person : {}", person);
 
         return person;
+    }
+
+    @Transactional
+    public void put(Person person){
+        personRepository.save(person);
     }
 }

@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @Transactional
 @SpringBootTest
 class PersonRepositoryTest {
@@ -31,27 +33,27 @@ class PersonRepositoryTest {
 
         List<Person> people = personRepository.findByName("john");
 
-        Assertions.assertThat(people.size()).isEqualTo(1);
-        Assertions.assertThat(people.get(0).getName()).isEqualTo("john");
-        Assertions.assertThat(people.get(0).getAge()).isEqualTo(10);
-        Assertions.assertThat(people.get(0).getBloodType()).isEqualTo("B");
+        assertThat(people.size()).isEqualTo(1);
+        assertThat(people.get(0).getName()).isEqualTo("john");
+        assertThat(people.get(0).getAge()).isEqualTo(10);
+        assertThat(people.get(0).getBloodType()).isEqualTo("B");
     }
 
     @Test
     void findByBloodType(){
         List<Person> result = personRepository.findByBloodType("A");
 
-        Assertions.assertThat(result.size()).isEqualTo(2);
-        Assertions.assertThat(result.get(0).getName()).isEqualTo("martin");
-        Assertions.assertThat(result.get(1).getName()).isEqualTo("benny");
+        assertThat(result.size()).isEqualTo(2);
+        assertThat(result.get(0).getName()).isEqualTo("martin");
+        assertThat(result.get(1).getName()).isEqualTo("benny");
     }
 
     @Test
     void findByBirthDayBetween(){
         List<Person> result = personRepository.findByMonthOfBirthday(8); //8월 생일자 추출
 
-        Assertions.assertThat(result.size()).isEqualTo(2);
-        Assertions.assertThat(result.get(0).getName()).isEqualTo("martin");
-        Assertions.assertThat(result.get(1).getName()).isEqualTo("sophia");
+        assertThat(result.size()).isEqualTo(2);
+        assertThat(result.get(0).getName()).isEqualTo("martin");
+        assertThat(result.get(1).getName()).isEqualTo("sophia");
     }
 }
