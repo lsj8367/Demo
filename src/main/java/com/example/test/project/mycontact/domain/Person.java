@@ -71,6 +71,10 @@ public class Person {
         if(!ObjectUtils.isEmpty(personDto.getPhoneNumber())){
             this.setPhoneNumber(personDto.getPhoneNumber());
         }
+
+        if(personDto.getBirthday() != null){
+            this.setBirthday(Birthday.of(personDto.getBirthday()));
+        }
     }
 
     public Integer getAge(){
