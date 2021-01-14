@@ -1,5 +1,0 @@
-GET http://localhost:8080/api/helloWorld
-
-###
-
-GET http://localhost:8080/api/person/1

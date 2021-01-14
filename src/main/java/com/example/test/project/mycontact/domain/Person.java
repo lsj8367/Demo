@@ -44,16 +44,16 @@ public class Person {
 
     private String job;
 
-    @ToString.Exclude //상단과 같은 뜻
+    //@ToString.Exclude //상단과 같은 뜻
     private String phoneNumber;
 
     @ColumnDefault("0") // 0은 false
     private boolean deleted; //아이디 삭제여부
 
     //person에 대해 동작을 수행해도 영속성 결합으로 같이 변경 삭제 추가등이 된다.  optional = false는 inner join 특성을 갖고있다.
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true) //{CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}
-    @ToString.Exclude
-    private Block block;
+//    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true) //{CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}
+//    @ToString.Exclude
+//    private Block block;
 
     public void set(PersonDto personDto){ //데이터 수정작업 하지 않은것은 유지하게 만드는 메소드
         if(!ObjectUtils.isEmpty(personDto.getHobby())){

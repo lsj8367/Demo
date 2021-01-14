@@ -1,10 +1,8 @@
 package com.example.test.project.mycontact.service;
 
 import com.example.test.project.mycontact.controller.dto.PersonDto;
-import com.example.test.project.mycontact.domain.Block;
 import com.example.test.project.mycontact.domain.Person;
 import com.example.test.project.mycontact.domain.dto.Birthday;
-import com.example.test.project.mycontact.repository.BlockRepository;
 import com.example.test.project.mycontact.repository.PersonRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +19,7 @@ public class PersonService {
     @Autowired
     PersonRepository personRepository;
 
-    @Autowired
-    BlockRepository blockRepository;
-
+    /*
     public List<Person> getPeopleExcludeBlocks(){ //차단한사람 제외 전체 사람 출력
         List<Person> people = personRepository.findAll();
 //        List<Block> blocks = blockRepository.findAll();
@@ -34,6 +30,7 @@ public class PersonService {
         //return people.stream().filter(person -> person.getBlock() == null).collect(Collectors.toList()); //filter는 조건에 맞는것만 return해줌
         return personRepository.findByBlockIsNull();
     }
+     */
 
     public List<Person> getPeopleByName(String name){
 //        List<Person> people = personRepository.findAll();
