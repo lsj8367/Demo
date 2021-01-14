@@ -6,7 +6,6 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Where;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -35,17 +34,7 @@ public class Person {
     @Column(nullable = false)
     private String name;
 
-    @NonNull
-    @Column(nullable = false)
-    @Min(1)
-    private Integer age;
-
     private String hobby;
-
-    @NonNull
-    @NotEmpty
-    @Column(nullable = false)
-    private String bloodType;
 
     private String address;
 
@@ -67,16 +56,8 @@ public class Person {
     private Block block;
 
     public void set(PersonDto personDto){ //데이터 수정작업 하지 않은것은 유지하게 만드는 메소드
-        if (personDto.getAge() != 0){
-            this.setAge(personDto.getAge());
-        }
-
         if(!ObjectUtils.isEmpty(personDto.getHobby())){
             this.setHobby(personDto.getHobby());
-        }
-
-        if(!ObjectUtils.isEmpty(personDto.getBloodType())){
-            this.setBloodType(personDto.getBloodType());
         }
 
         if(!ObjectUtils.isEmpty(personDto.getAddress())){
@@ -90,5 +71,17 @@ public class Person {
         if(!ObjectUtils.isEmpty(personDto.getPhoneNumber())){
             this.setPhoneNumber(personDto.getPhoneNumber());
         }
+    }
+
+    public Integer getAge(){
+        if(this.birthday != null){
+            return LocalDate.now().getYear() - this.birthday.getYearOfBirthday() + 1; //나이
+        }else{
+            return null;
+        }
+    }
+
+    public boolean isBirthdayToday(){
+        return LocalDate.now().equals(LocalDate.of(this.birthday.getYearOfBirthday(), this.birthday.getMonthOfBirthday(), this.birthday.getDayOfBirthday()));
     }
 }

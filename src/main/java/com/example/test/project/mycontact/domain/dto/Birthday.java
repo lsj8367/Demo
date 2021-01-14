@@ -14,18 +14,17 @@ import java.time.LocalDate;
 @Data
 public class Birthday {
     private Integer yearOfBirthday;
-
-    @Min(1) //최소값
-    @Max(12) //최대값
     private Integer monthOfBirthday; // int는 null허용 x
-
-    @Min(1)
-    @Max(31)
     private Integer dayOfBirthday;
 
-    public Birthday(LocalDate birthday){
+
+    private Birthday(LocalDate birthday){
         this.yearOfBirthday = birthday.getYear();
         this.monthOfBirthday = birthday.getMonthValue();
         this.dayOfBirthday = birthday.getDayOfMonth();
+    }
+
+    public static Birthday of(LocalDate birthday){
+        return new Birthday(birthday);
     }
 }
