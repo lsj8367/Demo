@@ -28,32 +28,27 @@ public class PersonController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED) //201번 response 신호를 보내줌
-    public void postPerson(@RequestBody Person person){
-        personService.put(person); // person객체 저장
-
-        log.info("person -> {}", personRepository.findAll());
+    public void postPerson(@RequestBody PersonDto personDto){
+        personService.put(personDto); // person객체 저장
     }
 
     @PutMapping("/{id}")
     public void modifyPerson(@PathVariable Long id, @RequestBody PersonDto personDto){
         personService.modify(id, personDto);
-
-        log.info("person -> {}", personRepository.findAll());
-
     }
 
     @PatchMapping("/{id}") //일부 리소스만 업데이트
     public void modifyPerson(@PathVariable Long id, String name){
         personService.modify(id, name);
-
-        log.info("person -> {}", personRepository.findAll());
     }
 
     @DeleteMapping("/{id}")
+    //public boolean deletePerson(@PathVariable Long id){
     public void deletePerson(@PathVariable Long id){
         personService.delete(id);
 
-        log.info("person -> {}", personRepository.findAll());
+        // 방법1.삭제 검증 지워진 내역중 입력받은 id와 같은것이 있는지 확인후 리턴
+        //return personRepository.findPeopleDeleted().stream().anyMatch(person -> person.getId().equals(id));
     }
 
 }
