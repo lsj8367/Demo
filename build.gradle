@@ -33,6 +33,7 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.projectlombok:lombok'
+    testImplementation 'org.mockito:mockito-junit-jupiter'
 }
 
 test {

@@ -2,12 +2,19 @@ package com.example.test.project.mycontact.controller;
 
 import com.example.test.project.mycontact.controller.dto.PersonDto;
 import com.example.test.project.mycontact.domain.Person;
+import com.example.test.project.mycontact.exception.PersonNotFoundException;
+import com.example.test.project.mycontact.exception.RenameIsNotPermittedException;
+import com.example.test.project.mycontact.exception.dto.ErrorResponse;
 import com.example.test.project.mycontact.repository.PersonRepository;
 import com.example.test.project.mycontact.service.PersonService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.net.http.HttpResponse;
 
 @RestController //restful api 동작을 하는 controller 명시
 @RequestMapping(value = "/api/person")
@@ -50,5 +57,4 @@ public class PersonController {
         // 방법1.삭제 검증 지워진 내역중 입력받은 id와 같은것이 있는지 확인후 리턴
         //return personRepository.findPeopleDeleted().stream().anyMatch(person -> person.getId().equals(id));
     }
-
 }

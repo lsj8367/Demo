@@ -1,10 +1,12 @@
 package com.example.test.project.mycontact.controller;
 
+import com.example.test.project.mycontact.exception.dto.ErrorResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
 
 //@Controller
 //@ResponseBody
@@ -15,4 +17,11 @@ public class HelloWorldController {
     public String helloWorld(){
         return "HelloWorld!";
     }
+    
+    @GetMapping(value = "/api/helloException")
+    public String helloException(){ //항상오류를 발생시키는 예외처리
+        throw new RuntimeException("Hello RuntimeException");
+    }
+
+
 }

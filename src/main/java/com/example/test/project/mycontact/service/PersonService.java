@@ -2,7 +2,8 @@ package com.example.test.project.mycontact.service;
 
 import com.example.test.project.mycontact.controller.dto.PersonDto;
 import com.example.test.project.mycontact.domain.Person;
-import com.example.test.project.mycontact.domain.dto.Birthday;
+import com.example.test.project.mycontact.exception.PersonNotFoundException;
+import com.example.test.project.mycontact.exception.RenameIsNotPermittedException;
 import com.example.test.project.mycontact.repository.PersonRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -45,12 +44,9 @@ public class PersonService {
     @Transactional(readOnly = true) //select문만 있기때문에 readOnly = true
     public Person getPerson(Long id){
 //        Person person = personRepository.findById(id).get();
+        //log.info("person : {}", person);
 
-        Person person = personRepository.findById(id).orElse(null); //get을 기본으로 하는데 값이 없다면 null을 리턴
-
-        log.info("person : {}", person);
-
-        return person;
+        return personRepository.findById(id).orElse(null); //get을 기본으로 하는데 값이 없다면 null을 리턴
     }
 
     @Transactional
@@ -64,10 +60,10 @@ public class PersonService {
 
     @Transactional
     public void modify(Long id, PersonDto personDto){
-        Person person = personRepository.findById(id).orElseThrow(() -> new RuntimeException("아이디가 존재하지 않습니다."));
+        Person person = personRepository.findById(id).orElseThrow(PersonNotFoundException::new);
 
         if(!person.getName().equals(personDto.getName())){
-            throw new RuntimeException("이름이 다릅니다.");
+            throw new RenameIsNotPermittedException();
         }
 
         person.set(personDto); //여기서 값을 안준것은 그냥 유지할수 있게 해주었다.
@@ -77,7 +73,8 @@ public class PersonService {
 
     @Transactional
     public void modify(Long id, String name){
-        Person person = personRepository.findById(id).orElseThrow(() -> new RuntimeException("아이디가 존재하지 않습니다"));
+        //custom 예외처리
+        Person person = personRepository.findById(id).orElseThrow(PersonNotFoundException::new);
 
         person.setName(name);
 
@@ -92,9 +89,9 @@ public class PersonService {
         //바로 삭제하면 문제가 생길수있다.
         
         //그래서 update형식으로 deleted 옵션을 넣어줌
-        Person person = personRepository.findById(id).orElseThrow(() -> new RuntimeException("아이디가 존재하지 않습니다"));
+        Person person = personRepository.findById(id).orElseThrow(PersonNotFoundException::new);
         
-        person.setDeleted(true);
+        person.setDeleted(true); //soft delete
         
         personRepository.save(person);
     }
