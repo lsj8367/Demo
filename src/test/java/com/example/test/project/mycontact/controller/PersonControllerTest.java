@@ -23,11 +23,13 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.util.NestedServletException;
 
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -62,14 +64,30 @@ public class PersonControllerTest {
     void beforeEach(){
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(wac)
+                .addFilters(new CharacterEncodingFilter("UTF-8", true))
                 .alwaysDo(print())
                 .build();
     }
 
     @Test
+    void getAll() throws Exception{
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/api/person"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value(hasSize(6))) // $는 리스트 객체여서 총갯수 7개
+                .andExpect(jsonPath("$.[0].name").value("martin"))
+                .andExpect(jsonPath("$.[1].name").value("david"))
+                .andExpect(jsonPath("$.[2].name").value("dennis"))
+                .andExpect(jsonPath("$.[3].name").value("sophia"))
+                .andExpect(jsonPath("$.[4].name").value("benny"))
+                .andExpect(jsonPath("$.[5].name").value("tony"));
+                //.andExpect(jsonPath("$.[6].name").value("andrew")); //삭제된값 제거
+    }
+
+    @Test
     void getPerson() throws Exception{
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/api/person/1").characterEncoding("utf-8"))
+                MockMvcRequestBuilders.get("/api/person/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("martin")) //json데이터를 확인하여 검증함
                 .andExpect(jsonPath("$.hobby").isEmpty())
@@ -89,7 +107,7 @@ public class PersonControllerTest {
         PersonDto dto = PersonDto.of("martin", "programming", "판교", LocalDate.now(), "programmer", "010-1111-2222");
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/person")
-                        .contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content(toJsonString(dto)))
                 .andExpect(status().isCreated()); //isok는 200 iscreated는 201
 
@@ -110,12 +128,39 @@ public class PersonControllerTest {
 
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/person")
-                .contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(toJsonString(dto)))
-            .andExpect(jsonPath("$.code").value(500))
-            .andExpect(jsonPath("$.message").value("알 수 없는 서버 오류가 발생하였습니다."));
+                .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value(400))
+            .andExpect(jsonPath("$.message").value("이름은 필수값입니다"));
     }
 
+    @Test
+    void postPersonIfNameIsEmpty() throws Exception{
+        PersonDto dto = new PersonDto();
+        dto.setName("");
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.post("/api/person")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJsonString(dto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.message").value("이름은 필수값입니다"));
+    }
+
+    @Test
+    void postPersonIfNameIsBlankString() throws Exception{
+        PersonDto dto = new PersonDto();
+        dto.setName(" "); //공백은 null이 아니기 때문에 정상 201을 출력해줌 그래서 dto에서 @NotEmpty 대신 @NotBlank를 사용
+        mockMvc.perform(
+                MockMvcRequestBuilders.post("/api/person")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJsonString(dto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.message").value("이름은 필수값입니다"));
+    }
 
     @Test
     void modifyPerson() throws Exception{
@@ -123,7 +168,7 @@ public class PersonControllerTest {
 
         mockMvc.perform(
                 MockMvcRequestBuilders.put("/api/person/1")
-                .contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(toJsonString(dto))) //데이터를 주지않으면 안바꾼것은 null로 바뀐다.
                 .andExpect(status().isOk());
 
@@ -148,7 +193,7 @@ public class PersonControllerTest {
 
         mockMvc.perform(
                 MockMvcRequestBuilders.put("/api/person/1")
-                        .contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content(toJsonString(dto))) //데이터를 주지않으면 안바꾼것은 null로 바뀐다.
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value(400))
@@ -161,7 +206,7 @@ public class PersonControllerTest {
 
         mockMvc.perform(
                 MockMvcRequestBuilders.put("/api/person/10")
-                    .contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
+                    .contentType(MediaType.APPLICATION_JSON)
                     .content(toJsonString(dto)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value(400))
@@ -172,7 +217,7 @@ public class PersonControllerTest {
     void modifyName() throws Exception{
         mockMvc.perform(
                 MockMvcRequestBuilders.patch("/api/person/1")
-                .contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
+                .contentType(MediaType.APPLICATION_JSON)
                 .param("name", "martinModified"))
                 .andExpect(status().isOk());
 
@@ -184,7 +229,7 @@ public class PersonControllerTest {
     void deletePerson() throws Exception{
         mockMvc.perform(
                 MockMvcRequestBuilders.delete("/api/person/1")
-                .contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8"))
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
                 //.andExpect(content().string("true")); //삭제가 true인지 확인 방법1

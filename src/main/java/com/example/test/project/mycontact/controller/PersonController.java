@@ -14,7 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.net.http.HttpResponse;
+import java.util.List;
 
 @RestController //restful api 동작을 하는 controller 명시
 @RequestMapping(value = "/api/person")
@@ -27,6 +29,11 @@ public class PersonController {
     @Autowired
     private PersonRepository personRepository;
 
+    @GetMapping
+    public List<Person> getAll(){
+        return personService.getAll();
+    }
+
     //@RequestMapping(method = RequestMethod.GET)
     @GetMapping("/{id}")
     public Person getPerson(@PathVariable Long id){ // ?id=1 이런식이 아니라 /1 이런식으로 호출할수 있게된다.
@@ -35,7 +42,7 @@ public class PersonController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED) //201번 response 신호를 보내줌
-    public void postPerson(@RequestBody PersonDto personDto){
+    public void postPerson(@RequestBody @Valid PersonDto personDto){
         personService.put(personDto); // person객체 저장
     }
 

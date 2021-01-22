@@ -31,6 +31,10 @@ public class PersonService {
     }
      */
 
+    public List<Person> getAll(){
+        return personRepository.findAll();
+    }
+
     public List<Person> getPeopleByName(String name){
 //        List<Person> people = personRepository.findAll();
 
