@@ -72,15 +72,15 @@ public class PersonControllerTest {
     @Test
     void getAll() throws Exception{
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/api/person"))
+                MockMvcRequestBuilders.get("/api/person")
+                .param("page", "1") // value string
+                .param("size", "2")) //2개씩 한페이지에
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").value(hasSize(6))) // $는 리스트 객체여서 총갯수 7개
-                .andExpect(jsonPath("$.[0].name").value("martin"))
-                .andExpect(jsonPath("$.[1].name").value("david"))
-                .andExpect(jsonPath("$.[2].name").value("dennis"))
-                .andExpect(jsonPath("$.[3].name").value("sophia"))
-                .andExpect(jsonPath("$.[4].name").value("benny"))
-                .andExpect(jsonPath("$.[5].name").value("tony"));
+                .andExpect(jsonPath("$.totalPages").value(3)) // 총페이지는 2개씩 나눴으니 3페이지가 됨
+                .andExpect(jsonPath("$.totalElements").value(6))
+                .andExpect(jsonPath("$.numberOfElements").value(2))
+                .andExpect(jsonPath("$.content.[0].name").value("dennis"))
+                .andExpect(jsonPath("$.content.[1].name").value("sophia"));
                 //.andExpect(jsonPath("$.[6].name").value("andrew")); //삭제된값 제거
     }
 
